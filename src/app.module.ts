@@ -4,12 +4,19 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from './config/config.module';
+import { ConfigService } from './config/config.service';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(
-      'mongodb://admin:wu19931018%40!*@1.14.73.77:27017/app_test?authSource=admin',
-    ),
+    ConfigModule,
+    // MongoDB Connection
+    MongooseModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => {
+        return configService.getMongoConfig();
+      },
+    }),
     UserModule,
     AuthModule,
   ],
