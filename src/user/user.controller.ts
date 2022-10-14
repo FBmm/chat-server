@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Res, Patch, HttpStatus, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Res,
+  Patch,
+  HttpStatus,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -11,13 +21,14 @@ export class UserController {
   @Get('/test-create')
   async create(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
     createUserDto = {
-      name: '123121'
-    }
+      name: 'wuqian',
+      pass: '0000',
+    };
     const user = await this.userService.create(createUserDto);
     if (user) {
-      return res.status(HttpStatus.OK).send(user)
+      return res.status(HttpStatus.OK).send(user);
     } else {
-      return res.status(HttpStatus.OK).send(null)
+      return res.status(HttpStatus.OK).send(null);
     }
   }
 

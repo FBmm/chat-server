@@ -22,6 +22,7 @@ export class UserRepository {
 
     user = new this.userModel({
       name: createUserDto.name,
+      pass: createUserDto.pass,
     });
 
     if (!user) {
@@ -34,13 +35,13 @@ export class UserRepository {
   async getUserByName(name: string) {
     let user;
     try {
-      user = await this.userModel.findOne({ name }, 'name name img role').exec();
+      user = await this.userModel.findOne({ name }, 'name pass').exec();
     } catch (error) {
       throw new InternalServerErrorException(error);
     }
 
     if (!user) {
-      return null
+      return null;
     }
 
     return user;

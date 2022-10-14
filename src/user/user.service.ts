@@ -5,21 +5,24 @@ import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService {
-  constructor(
-    private readonly userRepository: UserRepository,
-  ) {}
+  constructor(private readonly userRepository: UserRepository) {}
 
   async create(createUserDto: CreateUserDto) {
     const createdUser = await this.userRepository.createUser(createUserDto);
-        return createdUser;
+    return createdUser;
   }
 
   findAll() {
     return `This action returns all user`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    return 1;
+  }
+
+  async findOneByName(name: string) {
+    const user = await this.userRepository.getUserByName(name);
+    return user;
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
