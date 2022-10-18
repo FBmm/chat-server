@@ -1,18 +1,19 @@
 import {
   Controller,
   Get,
-  Post,
   Body,
   Res,
-  Patch,
   HttpStatus,
-  Param,
-  Delete,
+  Request,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { Response } from 'express';
+
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { TransformInterceptor } from '../common';
 
 @Controller('user')
 export class UserController {
@@ -32,23 +33,10 @@ export class UserController {
     }
   }
 
-  @Get()
-  findAll() {
-    return this.userService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(TransformInterceptor)
+  @Get('/info')
+  getProfile(@Request() req) {
+    return null;
   }
 }

@@ -1,2 +1,4 @@
-curl http://localhost:50011/profile
+curl http://localhost:3008/profile
 -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NjU2NzY3NjIsImV4cCI6MTY2NTY3Njg4Mn0.IyEOJ5vRtlEQncgGeeV-b8f5KrnDa2fNJcFGmfeWdZo"
+
+curl http://localhost:3008/auth/login -d '{"username": "wuqian", "password": "0000"}' -H "Content-Type: application/json"
