@@ -1,11 +1,15 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, IsMobilePhone } from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
-  name: string;
+  pass: string;
+
+  @IsMobilePhone()
+  @IsNotEmpty()
+  mobile: string;
 
   @IsString()
   @IsNotEmpty()
-  pass: string;
+  passSalt: string;
 }

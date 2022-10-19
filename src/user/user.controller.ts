@@ -1,42 +1,45 @@
 import {
   Controller,
   Get,
-  Body,
-  Res,
+  Post,
   HttpStatus,
   Request,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { Response } from 'express';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
 
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { TransformInterceptor } from '../common';
-
+import { HttpException } from '@nestjs/common';
+import { encryptPassword, makeSalt } from '../utils/cryptogram';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get('/test-create')
-  async create(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
-    createUserDto = {
-      name: 'wuqian',
-      pass: '0000',
-    };
-    const user = await this.userService.create(createUserDto);
-    if (user) {
-      return res.status(HttpStatus.OK).send(user);
-    } else {
-      return res.status(HttpStatus.OK).send(null);
-    }
-  }
-
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(TransformInterceptor)
   @Get('/info')
-  getProfile(@Request() req) {
+  getUserInfo(@Request() req) {
     return null;
+  }
+
+  @Post('/register')
+  @UseInterceptors(TransformInterceptor)
+  async userRegister(@Request() req) {
+    console.log(req.body);
+    const { code, ...result } = req.body;
+    if (code !== '1234') {
+      throw new HttpException(
+        { errcode: 40010, errmsg: '验证码错误' },
+        HttpStatus.OK,
+      );
+    }
+    const salt = makeSalt();
+    const hashPwd = encryptPassword(result.pass, salt);
+    result.pass = hashPwd;
+    result.passSalt = salt;
+    const user = await this.userService.create(result);
+    return user;
   }
 }

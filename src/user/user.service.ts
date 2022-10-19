@@ -20,8 +20,8 @@ export class UserService {
     return 1;
   }
 
-  async findOneByName(name: string) {
-    const user = await this.userRepository.getUserByName(name);
+  async findOneByMobile(mobile: string) {
+    const user = await this.userRepository.getUserByMobile(mobile);
     return user;
   }
 
